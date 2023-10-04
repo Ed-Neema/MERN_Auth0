@@ -1,7 +1,10 @@
 import express from "express"
+import {connectDB} from "./utils/dbConnection.js";
+
 
 const app = express();
-
-app.listen(3000, ()=>{
-    console.log("Server Listening on port 3000")
+const port = process.env.PORT || 5000;
+connectDB();
+app.listen(port, ()=>{
+    console.log("Server Listening on port: ", port)
 })
