@@ -2,10 +2,11 @@ import express from "express"
 import {connectDB} from "./utils/dbConnection.js";
 import userRoutes from  "./routes/user.route.js"
 import authRoutes from  "./routes/auth.route.js"
-
+// import cors from "cors"
 const app = express();
 const port = process.env.PORT || 5000;
 connectDB();
+// app.use(cors())
 app.use(express.json())
 app.listen(port, ()=>{
     console.log("Server Listening on port: ", port)
