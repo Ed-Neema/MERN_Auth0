@@ -6,7 +6,7 @@ import storage from "redux-persist/lib/storage";
 const rootReducer = combineReducers({ user: userReducer });
 const persistConfig = {
   key: "root",
-  version: 1,
+  version: 1, //uses -1 as default
   storage, //saves our data inside the local storage of the browser
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
