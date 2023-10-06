@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -20,6 +21,7 @@ import {
 } from "../redux/user/userSlice";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const fileRef = useRef(null);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
@@ -79,6 +81,31 @@ const Profile = () => {
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error));
+    }
+  };
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+      navigate("/sign-up");
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    }
+  };
+  const handleSignOut = async () => {
+    try {
+      await fetch("/api/auth/signout");
+      dispatch(signOut());
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -146,15 +173,12 @@ const Profile = () => {
       </form>
       <div className="flex justify-between mt-5">
         <span
-          // onClick={handleDeleteAccount}
+          onClick={handleDeleteAccount}
           className="text-red-700 cursor-pointer"
         >
           Delete Account
         </span>
-        <span
-          // onClick={handleSignOut}
-          className="text-red-700 cursor-pointer"
-        >
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
           Sign out
         </span>
       </div>
